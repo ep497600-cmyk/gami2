@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GAMI - Ultimate Game System</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/GLTFLoader.min.js"></script>
+</head>
+<body>
+    <!-- Splash Screen -->
+    <div id="splashScreen" class="splash-screen">
+        <div class="logo-container">
+            <span class="logo-g">G</span>
+            <span class="logo-ami">ami</span>
+        </div>
+    </div>
+
+    <!-- Login Screen -->
+    <div id="loginScreen" class="login-screen hidden">
+        <div class="glass-container">
+            <div class="logo">GAMI</div>
+            <div class="login-form">
+                <input type="text" id="username" placeholder="Username" class="glass-input">
+                <input type="password" id="password" placeholder="Password" class="glass-input">
+                <button id="loginBtn" class="glass-btn">Login</button>
+                <button id="guestBtn" class="glass-btn secondary">Guest Mode</button>
+                <div id="newAccountSection" class="hidden">
+                    <input type="password" id="confirmPassword" placeholder="Confirm Password" class="glass-input">
+                    <button id="createAccountBtn" class="glass-btn success">Create Account</button>
+                </div>
+                <div class="options">
+                    <span id="toggleNewAccount">Create New Account</span>
+                </div>
+            </div>
+            <div id="guestGate" class="guest-gate hidden">
+                <input type="password" id="guestPassword" placeholder="Enter 20-Character Guest Password" class="glass-input">
+                <button id="guestAccessBtn" class="glass-btn">Access Guest Mode</button>
+                <p class="attempts">Attempts remaining: <span id="attemptCount">3</span></p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Game Screen -->
+    <div id="gameScreen" class="game-screen hidden">
+        <!-- Top Bar -->
+        <div class="top-bar">
+            <div class="menu-btn" id="menuBtn">
+                <i class="fas fa-bars"></i>
+            </div>
+            <div class="coin-display">
+                <i class="fas fa-coins"></i>
+                <span id="coinCount">0</span>
+            </div>
+            <div class="user-info">
+                <span id="welcomeUser"></span>
+            </div>
+        </div>
+
+        <!-- Side Menu -->
+        <div id="sideMenu" class="side-menu">
+            <div class="menu-header">
+                <h3>Settings</h3>
+                <button class="close-menu" id="closeMenu">&times;</button>
+            </div>
+            <div class="theme-selector">
+                <h4>Themes</h4>
+                <div class="theme-grid">
+                    <div class="theme-option" data-theme="white">Default</div>
+                    <div class="theme-option" data-theme="dark">Dark</div>
+                    <div class="theme-option" data-theme="red">Red</div>
+                    <div class="theme-option" data-theme="blue">Blue</div>
+                    <div class="theme-option" data-theme="green">Green</div>
+                    <div class="theme-option" data-theme="purple">Purple</div>
+                    <div class="theme-option" data-theme="orange">Orange</div>
+                    <div class="theme-option" data-theme="pink">Pink</div>
+                    <div class="theme-option" data-theme="teal">Teal</div>
+                    <div class="theme-option" data-theme="gold">Gold</div>
+                </div>
+            </div>
+            <div class="future-features">
+                <h4>Future Features</h4>
+                <div class="feature-list">
+                    <div class="feature-item">Multiplayer Mode</div>
+                    <div class="feature-item">Achievements</div>
+                    <div class="feature-item">Leaderboards</div>
+                    <div class="feature-item">Daily Rewards</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <!-- Character View -->
+            <div class="character-section">
+                <div id="characterContainer" class="character-container"></div>
+                <div class="character-controls">
+                    <button class="control-btn" id="rotateLeft"><i class="fas fa-undo"></i></button>
+                    <button class="control-btn" id="startNow">Start Now</button>
+                    <button class="control-btn" id="rotateRight"><i class="fas fa-redo"></i></button>
+                </div>
+            </div>
+
+            <!-- AI Assistant -->
+            <div class="ai-assistant">
+                <div class="ai-header">
+                    <i class="fas fa-robot"></i>
+                    <h3>GAMI Assistant</h3>
+                </div>
+                <div class="ai-console">
+                    <div id="aiMessages" class="ai-messages"></div>
+                    <div class="ai-input">
+                        <input type="text" id="aiQuery" placeholder="Ask GAMI AI anything...">
+                        <button id="aiSend"><i class="fas fa-paper-plane"></i></button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Game World (Initially Hidden) -->
+            <div id="gameWorld" class="game-world hidden">
+                <div class="world-header">
+                    <h2>Pani Puri Empire</h2>
+                    <div class="world-stats">
+                        <span class="stat"><i class="fas fa-star"></i> <span id="starCount">0</span></span>
+                        <span class="stat"><i class="fas fa-user-friends"></i> <span id="helperCount">0</span></span>
+                    </div>
+                </div>
+                
+                <div class="game-area">
+                    <canvas id="gameCanvas"></canvas>
+                    <div class="game-controls">
+                        <button id="setupStall" class="game-btn"><i class="fas fa-store"></i> Setup Stall</button>
+                        <button id="addItem" class="game-btn"><i class="fas fa-box"></i> Add Item</button>
+                        <button id="hireHelper" class="game-btn"><i class="fas fa-user-plus"></i> Hire Helper</button>
+                    </div>
+                    
+                    <div class="investment-area">
+                        <div class="arrow-guide">
+                            <i class="fas fa-arrow-circle-down"></i>
+                            <p>Start with ₹100 Investment</p>
+                        </div>
+                        <div class="investment-circle" id="investmentCircle">
+                            <span>₹100</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="progression-tracker">
+                    <div class="milestone" data-milestone="stall">Stall Owner</div>
+                    <div class="milestone" data-milestone="shop">Shop Owner</div>
+                    <div class="milestone" data-milestone="restaurant">Restaurant</div>
+                    <div class="milestone" data-milestone="chain">Chain</div>
+                    <div class="milestone" data-milestone="bmw">BMW</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="auth.js"></script>
+    <script src="game.js"></script>
+    <script src="ai_engine.js"></script>
+    <script src="system_db.js"></script>
+</body>
+</html>
