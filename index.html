@@ -1,0 +1,490 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GAMI - Professional Business Simulation</title>
+    <link rel="stylesheet" href="gami_ui_global.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <!-- GAMI Logo Animation Container -->
+    <div class="logo-container" id="logoContainer">
+        <div class="logo-orchestrator">
+            <!-- Initial G -->
+            <svg class="logo-g initial-g" viewBox="0 0 200 200">
+                <path class="g-path" d="M100,50 C150,50 180,80 180,100 C180,120 150,150 100,150 C80,150 60,140 50,120" 
+                      fill="none" stroke="url(#gGradient)" stroke-width="8"/>
+                <path class="g-bar" d="M100,100 L150,100" 
+                      fill="none" stroke="url(#gGradient)" stroke-width="8"/>
+                <defs>
+                    <linearGradient id="gGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                        <stop offset="0%" stop-color="#2563eb" stop-opacity="0.9"/>
+                        <stop offset="100%" stop-color="#3b82f6" stop-opacity="0.7"/>
+                    </linearGradient>
+                </defs>
+            </svg>
+            
+            <!-- Second G (Merging) -->
+            <svg class="logo-g second-g" viewBox="0 0 200 200">
+                <path class="g-path" d="M100,50 C150,50 180,80 180,100 C180,120 150,150 100,150 C80,150 60,140 50,120" 
+                      fill="none" stroke="url(#gGradient2)" stroke-width="8"/>
+                <path class="g-bar" d="M100,100 L150,100" 
+                      fill="none" stroke="url(#gGradient2)" stroke-width="8"/>
+                <defs>
+                    <linearGradient id="gGradient2" x1="100%" y1="0%" x2="0%" y2="100%">
+                        <stop offset="0%" stop-color="#f59e0b" stop-opacity="0.9"/>
+                        <stop offset="100%" stop-color="#fbbf24" stop-opacity="0.7"/>
+                    </linearGradient>
+                </defs>
+            </svg>
+            
+            <!-- Animated 'i' -->
+            <div class="logo-i-container">
+                <div class="i-dot"></div>
+                <div class="i-stem"></div>
+            </div>
+            
+            <!-- Final GAMI Text -->
+            <div class="gami-text-final">
+                <span class="g-letter">G</span>
+                <span class="a-letter">A</span>
+                <span class="m-letter">M</span>
+                <span class="i-letter-final">I</span>
+            </div>
+        </div>
+        
+        <!-- Subtle Tagline -->
+        <div class="tagline">Professional Business Simulation Platform</div>
+        
+        <!-- Secret Owner Mode Trigger -->
+        <div class="owner-mode-trigger" id="ownerModeTrigger"></div>
+    </div>
+    
+    <!-- Authentication Layer (Initially Hidden) -->
+    <div class="auth-layer glass-layer" id="authLayer">
+        <div class="auth-container">
+            <div class="auth-header">
+                <h2 class="auth-title">Access GAMI</h2>
+                <div class="auth-subtitle">3-Tier Secure Authentication</div>
+            </div>
+            
+            <form class="auth-form" id="authForm">
+                <div class="form-group">
+                    <label for="username" class="form-label">
+                        <i class="fas fa-user-shield"></i> Alpha Username
+                    </label>
+                    <input type="text" id="username" class="glass-input" 
+                           placeholder="Enter unique alpha username" required
+                           pattern="[A-Za-z][A-Za-z0-9_]{3,19}"
+                           title="Must start with letter, 4-20 characters, letters, numbers, underscore">
+                    <div class="username-status" id="usernameStatus"></div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="password" class="form-label">
+                        <i class="fas fa-key"></i> Master Password
+                    </label>
+                    <input type="password" id="password" class="glass-input" 
+                           placeholder="Enter your secure password" required>
+                    <div class="password-strength" id="passwordStrength"></div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="authTier" class="form-label">
+                        <i class="fas fa-layer-group"></i> Authentication Tier
+                    </label>
+                    <select id="authTier" class="glass-select">
+                        <option value="static">Static Authentication</option>
+                        <option value="time">Time-Based Authentication</option>
+                        <option value="behavioral">Behavioral Authentication</option>
+                    </select>
+                </div>
+                
+                <div class="auth-actions">
+                    <button type="submit" class="glass-button primary-button" id="loginBtn">
+                        <i class="fas fa-sign-in-alt"></i> Enter GAMI
+                    </button>
+                    <button type="button" class="glass-button secondary-button" id="guestModeBtn">
+                        <i class="fas fa-user-clock"></i> Guest Mode
+                    </button>
+                </div>
+                
+                <div class="auth-footer">
+                    <div class="security-notice">
+                        <i class="fas fa-shield-alt"></i>
+                        <span>All data encrypted locally with AES-256</span>
+                    </div>
+                </div>
+            </form>
+            
+            <!-- Guest Mode Access Panel -->
+            <div class="guest-mode-panel" id="guestModePanel">
+                <h3 class="guest-title">Guest Mode Access</h3>
+                <div class="master-passwords">
+                    <div class="password-option">
+                        <button class="password-btn" data-password="GAMI_DEMO_2024">Demo Password</button>
+                    </div>
+                    <div class="password-option">
+                        <button class="password-btn" data-password="TIME_TRAVEL_ACCESS">Time Travel</button>
+                    </div>
+                    <div class="password-option">
+                        <button class="password-btn" data-password="OMEGA_SETTINGS_KEY">Omega Settings</button>
+                    </div>
+                </div>
+                <div class="attempt-counter">
+                    Attempts remaining: <span id="attemptCount">3</span>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Home Layer (Initially Hidden) -->
+    <div class="home-layer" id="homeLayer">
+        <header class="main-header glass-header">
+            <div class="header-left">
+                <div class="logo-small" id="logoSmall">
+                    <span class="gami-logo-small">G</span>
+                </div>
+                <nav class="main-nav">
+                    <a href="#" class="nav-link active" data-page="home">
+                        <i class="fas fa-home"></i> Home
+                    </a>
+                    <a href="#" class="nav-link" data-page="maidan">
+                        <i class="fas fa-globe-asia"></i> The Maidan
+                    </a>
+                    <a href="#" class="nav-link" data-page="business">
+                        <i class="fas fa-chart-line"></i> Business Hub
+                    </a>
+                    <a href="#" class="nav-link" data-page="bank">
+                        <i class="fas fa-university"></i> GAMI Bank
+                    </a>
+                </nav>
+            </div>
+            
+            <div class="header-right">
+                <!-- Live Coin Counter -->
+                <div class="coin-display glass-panel">
+                    <i class="fas fa-coins gold-icon"></i>
+                    <span class="coin-count" id="coinCount">0</span>
+                    <span class="coin-label">G-Coins</span>
+                </div>
+                
+                <!-- Profile Dropdown -->
+                <div class="profile-container">
+                    <div class="profile-toggle" id="profileToggle">
+                        <div class="profile-avatar" id="profileAvatar">G</div>
+                        <div class="profile-name" id="profileName">Guest</div>
+                        <i class="fas fa-chevron-down dropdown-icon"></i>
+                    </div>
+                    <div class="profile-dropdown glass-dropdown" id="profileDropdown">
+                        <div class="dropdown-header">
+                            <div class="dropdown-avatar" id="dropdownAvatar">G</div>
+                            <div class="dropdown-info">
+                                <div class="dropdown-username" id="dropdownUsername">alpha_user</div>
+                                <div class="dropdown-role">Business Executive</div>
+                            </div>
+                        </div>
+                        <div class="dropdown-divider"></div>
+                        <a href="#" class="dropdown-item">
+                            <i class="fas fa-user-cog"></i> Profile Settings
+                        </a>
+                        <a href="#" class="dropdown-item">
+                            <i class="fas fa-wallet"></i> Wallet Management
+                        </a>
+                        <a href="#" class="dropdown-item">
+                            <i class="fas fa-history"></i> Transaction History
+                        </a>
+                        <div class="dropdown-divider"></div>
+                        <a href="#" class="dropdown-item" id="neuralLinkBtn">
+                            <i class="fas fa-brain"></i> Neural Link AI
+                        </a>
+                        <a href="#" class="dropdown-item" id="omegaConsoleTrigger">
+                            <i class="fas fa-cogs"></i> Omega Console
+                        </a>
+                        <div class="dropdown-divider"></div>
+                        <a href="#" class="dropdown-item logout-btn" id="logoutBtn">
+                            <i class="fas fa-sign-out-alt"></i> Logout
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </header>
+        
+        <main class="main-content" id="mainContent">
+            <!-- Home Content -->
+            <div class="page-content active" id="homeContent">
+                <div class="welcome-banner glass-panel">
+                    <div class="welcome-content">
+                        <h1 class="welcome-title">Welcome to <span class="gami-highlight">GAMI</span></h1>
+                        <p class="welcome-subtitle">Your professional business simulation environment</p>
+                        <div class="character-display" id="characterDisplay">
+                            <!-- Character SVG will be injected here -->
+                        </div>
+                        <div class="stats-grid">
+                            <div class="stat-card glass-card">
+                                <div class="stat-icon">
+                                    <i class="fas fa-rocket"></i>
+                                </div>
+                                <div class="stat-value" id="businessLevel">1</div>
+                                <div class="stat-label">Business Level</div>
+                            </div>
+                            <div class="stat-card glass-card">
+                                <div class="stat-icon">
+                                    <i class="fas fa-users"></i>
+                                </div>
+                                <div class="stat-value" id="employeeCount">0</div>
+                                <div class="stat-label">Employees</div>
+                            </div>
+                            <div class="stat-card glass-card">
+                                <div class="stat-icon">
+                                    <i class="fas fa-building"></i>
+                                </div>
+                                <div class="stat-value" id="propertyCount">0</div>
+                                <div class="stat-label">Properties</div>
+                            </div>
+                            <div class="stat-card glass-card">
+                                <div class="stat-icon">
+                                    <i class="fas fa-chart-bar"></i>
+                                </div>
+                                <div class="stat-value" id="marketShare">0%</div>
+                                <div class="stat-label">Market Share</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="quick-actions">
+                    <h2 class="section-title">Quick Actions</h2>
+                    <div class="actions-grid">
+                        <button class="action-card glass-card" id="openBusinessBtn">
+                            <div class="action-icon">
+                                <i class="fas fa-store"></i>
+                            </div>
+                            <div class="action-title">Open Business</div>
+                            <div class="action-desc">Start a new venture</div>
+                        </button>
+                        <button class="action-card glass-card" id="hireStaffBtn">
+                            <div class="action-icon">
+                                <i class="fas fa-user-tie"></i>
+                            </div>
+                            <div class="action-title">Hire Staff</div>
+                            <div class="action-desc">Expand your team</div>
+                        </button>
+                        <button class="action-card glass-card" id="investBtn">
+                            <div class="action-icon">
+                                <i class="fas fa-hand-holding-usd"></i>
+                            </div>
+                            <div class="action-title">Invest</div>
+                            <div class="action-desc">Grow your capital</div>
+                        </button>
+                        <button class="action-card glass-card" id="maidanBtn">
+                            <div class="action-icon">
+                                <i class="fas fa-map-marked-alt"></i>
+                            </div>
+                            <div class="action-title">Enter Maidan</div>
+                            <div class="action-desc">Explore the world</div>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- The Maidan Canvas -->
+            <div class="page-content" id="maidanContent">
+                <div class="maidan-header glass-panel">
+                    <h2 class="section-title">The Maidan - Infinite Business World</h2>
+                    <p class="section-subtitle">Navigate the ₹100 Ghera and expand your empire</p>
+                    <div class="maidan-controls">
+                        <button class="control-btn" id="zoomInBtn">
+                            <i class="fas fa-search-plus"></i>
+                        </button>
+                        <button class="control-btn" id="zoomOutBtn">
+                            <i class="fas fa-search-minus"></i>
+                        </button>
+                        <button class="control-btn" id="centerMapBtn">
+                            <i class="fas fa-crosshairs"></i>
+                        </button>
+                        <div class="coord-display">
+                            X: <span id="coordX">0</span>, Y: <span id="coordY">0</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="maidan-container">
+                    <canvas id="maidanCanvas" class="maidan-canvas"></canvas>
+                    <div class="maidan-overlay">
+                        <div class="ghera-indicator">
+                            <div class="ghera-icon">
+                                ₹
+                            </div>
+                            <div class="ghera-info">
+                                <div class="ghera-title">₹100 Ghera</div>
+                                <div class="ghera-desc">Business transaction zone</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Omega Console (Hidden) -->
+            <div class="omega-console-layer" id="omegaConsole">
+                <div class="omega-header glass-header">
+                    <h2 class="omega-title">
+                        <i class="fas fa-infinity"></i> Omega Console
+                    </h2>
+                    <div class="omega-subtitle">200+ Advanced Features - Owner Access Only</div>
+                    <button class="close-omega" id="closeOmegaBtn">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+                <div class="omega-content">
+                    <div class="omega-sidebar">
+                        <div class="omega-category active" data-category="time">
+                            <i class="fas fa-clock"></i> Time Manipulation
+                        </div>
+                        <div class="omega-category" data-category="economy">
+                            <i class="fas fa-chart-pie"></i> Economy Control
+                        </div>
+                        <div class="omega-category" data-category="ai">
+                            <i class="fas fa-robot"></i> AI Configuration
+                        </div>
+                        <div class="omega-category" data-category="system">
+                            <i class="fas fa-server"></i> System Overrides
+                        </div>
+                        <div class="omega-category" data-category="world">
+                            <i class="fas fa-globe"></i> World Editor
+                        </div>
+                    </div>
+                    <div class="omega-main">
+                        <div class="omega-features" id="timeFeatures">
+                            <h3 class="feature-category-title">Time Manipulation</h3>
+                            <div class="feature-grid">
+                                <div class="feature-card glass-card">
+                                    <div class="feature-icon">
+                                        <i class="fas fa-forward"></i>
+                                    </div>
+                                    <div class="feature-content">
+                                        <div class="feature-title">Time Skip</div>
+                                        <div class="feature-desc">Advance simulation by hours, days, or weeks</div>
+                                        <div class="feature-controls">
+                                            <select class="time-select glass-select">
+                                                <option value="1">1 Hour</option>
+                                                <option value="6">6 Hours</option>
+                                                <option value="24">1 Day</option>
+                                                <option value="168">1 Week</option>
+                                            </select>
+                                            <button class="feature-action-btn">Execute</button>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="feature-card glass-card">
+                                    <div class="feature-icon">
+                                        <i class="fas fa-percentage"></i>
+                                    </div>
+                                    <div class="feature-content">
+                                        <div class="feature-title">Interest Compounder</div>
+                                        <div class="feature-desc">Automated compound interest calculation</div>
+                                        <div class="feature-controls">
+                                            <input type="number" class="glass-input" placeholder="Principal Amount" value="1000">
+                                            <input type="number" class="glass-input" placeholder="Rate %" value="5">
+                                            <button class="feature-action-btn">Calculate</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Neural Link AI Panel -->
+            <div class="neural-link-layer" id="neuralLinkLayer">
+                <div class="neural-header glass-header">
+                    <h2 class="neural-title">
+                        <i class="fas fa-brain"></i> GAMI Neural Link
+                    </h2>
+                    <div class="neural-subtitle">Self-Modifying AI with Complete System Memory</div>
+                    <button class="close-neural" id="closeNeuralBtn">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+                <div class="neural-content">
+                    <div class="neural-memory">
+                        <div class="memory-header">
+                            <h3>System Memory</h3>
+                            <div class="memory-stats">
+                                <span class="stat-item">
+                                    <i class="fas fa-code"></i>
+                                    Lines: <span id="codeLines">0</span>
+                                </span>
+                                <span class="stat-item">
+                                    <i class="fas fa-mouse-pointer"></i>
+                                    Buttons: <span id="buttonCount">0</span>
+                                </span>
+                                <span class="stat-item">
+                                    <i class="fas fa-database"></i>
+                                    Variables: <span id="variableCount">0</span>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="memory-log" id="memoryLog">
+                            <!-- AI memory log will be populated here -->
+                        </div>
+                    </div>
+                    <div class="neural-controls">
+                        <div class="control-group">
+                            <label for="aiCommand" class="control-label">
+                                <i class="fas fa-terminal"></i> AI Command Input
+                            </label>
+                            <textarea id="aiCommand" class="glass-textarea" 
+                                      placeholder="Enter AI modification command..."></textarea>
+                            <div class="control-actions">
+                                <button class="neural-btn" id="executeAiBtn">
+                                    <i class="fas fa-play"></i> Execute Command
+                                </button>
+                                <button class="neural-btn secondary" id="scanSystemBtn">
+                                    <i class="fas fa-search"></i> Scan System
+                                </button>
+                                <button class="neural-btn secondary" id="optimizeCodeBtn">
+                                    <i class="fas fa-bolt"></i> Optimize Code
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+        
+        <!-- Floating Neural Link Button -->
+        <button class="floating-neural-btn" id="floatingNeuralBtn">
+            <i class="fas fa-brain"></i>
+        </button>
+    </div>
+
+    <!-- Scripts -->
+    <script src="auth_engine.js"></script>
+    <script src="vault_security.js"></script>
+    <script src="world_engine.js"></script>
+    <script src="morph_evolution.js"></script>
+    <script src="worker_ai_logic.js"></script>
+    <script src="gami_brain_executor.js"></script>
+    
+    <!-- Initialize GAMI -->
+    <script>
+        // Initialize the application after DOM loads
+        document.addEventListener('DOMContentLoaded', function() {
+            // Start logo animation
+            setTimeout(() => {
+                window.startLogoAnimation();
+            }, 500);
+            
+            // Initialize modules
+            if (typeof GAMI !== 'undefined') {
+                GAMI.initialize();
+            }
+        });
+    </script>
+</body>
+</html>
