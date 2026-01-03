@@ -3,320 +3,874 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>G-AI-MI: Gami AI Mobile Interface</title>
-    <!-- GAMI Core CSS -->
-    <link rel="stylesheet" type="text/css" href="/css/master_style.css" absolute>
-    <!-- Branding Configuration -->
-    <script type="text/javascript" src="/js/branding.js" absolute></script>
-    <!-- Secret Configuration -->
-    <script type="text/javascript" src="/js/secret_config.js" absolute></script>
+    <title>GAMI - The AI Evolution</title>
+    
+    <!-- External CSS Files -->
+    <link rel="stylesheet" href="/assets/css/master_style.css">
+    
+    <!-- Preload critical resources -->
+    <link rel="preload" href="/assets/js/gami_core.js" as="script">
+    <link rel="preload" href="/assets/js/ai_brain.js" as="script">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="/assets/icons/gami_logo.svg">
+    
+    <style>
+        /* Initial loading screen styling */
+        body {
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            font-family: 'Segoe UI', system-ui, sans-serif;
+            background: #0a0a14;
+            color: #e0e0ff;
+            height: 100vh;
+            width: 100vw;
+            position: fixed;
+        }
+        
+        /* Prevent text selection */
+        * {
+            -webkit-touch-callout: none;
+            -webkit-user-select: none;
+            user-select: none;
+        }
+        
+        /* Loading Screen */
+        #loading-screen {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #0a0a14 0%, #1a1a2e 100%);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            transition: opacity 0.5s ease;
+        }
+        
+        .logo-container {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 40px;
+        }
+        
+        .logo-letter {
+            font-size: 4.5rem;
+            font-weight: 800;
+            background: linear-gradient(90deg, #00d4ff, #0088ff, #a855f7);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            opacity: 0;
+            transform: translateY(20px);
+        }
+        
+        .logo-letter.g { animation: letterReveal 0.8s 0.1s forwards; }
+        .logo-letter.a1 { animation: letterReveal 0.8s 0.3s forwards; }
+        .logo-letter.i { animation: letterReveal 0.8s 0.5s forwards; }
+        .logo-letter.m { animation: letterReveal 0.8s 0.7s forwards; }
+        .logo-letter.a2 { animation: letterReveal 0.8s 0.9s forwards; }
+        
+        @keyframes letterReveal {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .loading-bar-container {
+            width: 280px;
+            height: 4px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 2px;
+            overflow: hidden;
+            margin-top: 20px;
+        }
+        
+        .loading-bar {
+            height: 100%;
+            width: 0%;
+            background: linear-gradient(90deg, #00d4ff, #a855f7);
+            border-radius: 2px;
+            transition: width 0.3s ease;
+        }
+        
+        .loading-text {
+            margin-top: 15px;
+            font-size: 0.9rem;
+            color: #a0a0d0;
+            letter-spacing: 1px;
+        }
+        
+        /* Login Screen */
+        #login-screen {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #0a0a14 0%, #1a1a2e 100%);
+            display: none;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 900;
+            padding: 20px;
+        }
+        
+        .login-form {
+            width: 100%;
+            max-width: 320px;
+            background: rgba(20, 20, 40, 0.8);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 30px;
+            border: 1px solid rgba(100, 100, 255, 0.1);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+        
+        .login-title {
+            text-align: center;
+            margin-bottom: 25px;
+            font-size: 1.8rem;
+            font-weight: 600;
+            background: linear-gradient(90deg, #00d4ff, #a855f7);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+        
+        .input-group {
+            margin-bottom: 20px;
+        }
+        
+        .input-label {
+            display: block;
+            margin-bottom: 8px;
+            font-size: 0.9rem;
+            color: #a0a0d0;
+        }
+        
+        .input-field {
+            width: 100%;
+            padding: 15px;
+            background: rgba(10, 10, 25, 0.7);
+            border: 1px solid rgba(100, 100, 255, 0.2);
+            border-radius: 10px;
+            color: #e0e0ff;
+            font-size: 1rem;
+            box-sizing: border-box;
+            transition: border 0.3s;
+        }
+        
+        .input-field:focus {
+            outline: none;
+            border-color: #00d4ff;
+        }
+        
+        .login-button {
+            width: 100%;
+            padding: 16px;
+            background: linear-gradient(90deg, #0088ff, #a855f7);
+            border: none;
+            border-radius: 10px;
+            color: white;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s, opacity 0.2s;
+            margin-top: 10px;
+        }
+        
+        .login-button:active {
+            transform: scale(0.98);
+            opacity: 0.9;
+        }
+        
+        /* Home Screen */
+        #home-screen {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #0a0a14;
+            display: none;
+            flex-direction: column;
+            z-index: 800;
+        }
+        
+        /* Header with HUD and Menu */
+        .header {
+            height: 60px;
+            background: rgba(20, 20, 40, 0.9);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(100, 100, 255, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 20px;
+            z-index: 10;
+        }
+        
+        .hud-info {
+            display: flex;
+            gap: 20px;
+        }
+        
+        .hud-item {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .hud-label {
+            font-size: 0.7rem;
+            color: #a0a0d0;
+        }
+        
+        .hud-value {
+            font-size: 1rem;
+            font-weight: 600;
+            color: #00d4ff;
+        }
+        
+        .menu-button {
+            background: none;
+            border: none;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            gap: 5px;
+            padding: 0;
+        }
+        
+        .menu-line {
+            width: 100%;
+            height: 3px;
+            background: #e0e0ff;
+            border-radius: 2px;
+            transition: transform 0.3s;
+        }
+        
+        .menu-button.active .menu-line:nth-child(1) {
+            transform: rotate(45deg) translate(5px, 5px);
+        }
+        
+        .menu-button.active .menu-line:nth-child(2) {
+            opacity: 0;
+        }
+        
+        .menu-button.active .menu-line:nth-child(3) {
+            transform: rotate(-45deg) translate(5px, -5px);
+        }
+        
+        /* Main Content Area */
+        .main-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            position: relative;
+        }
+        
+        /* Gami AI Prism */
+        .gami-prism-container {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+        }
+        
+        .gami-prism {
+            width: 200px;
+            height: 200px;
+            position: relative;
+            transform-style: preserve-3d;
+            animation: prismRotate 20s infinite linear;
+        }
+        
+        @keyframes prismRotate {
+            from { transform: rotateX(15deg) rotateY(0deg); }
+            to { transform: rotateX(15deg) rotateY(360deg); }
+        }
+        
+        .prism-face {
+            position: absolute;
+            width: 200px;
+            height: 200px;
+            background: rgba(0, 212, 255, 0.05);
+            border: 1px solid rgba(0, 212, 255, 0.2);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 2rem;
+            font-weight: 800;
+            color: rgba(0, 212, 255, 0.3);
+        }
+        
+        .prism-face:nth-child(1) { transform: rotateY(0deg) translateZ(115px); }
+        .prism-face:nth-child(2) { transform: rotateY(72deg) translateZ(115px); }
+        .prism-face:nth-child(3) { transform: rotateY(144deg) translateZ(115px); }
+        .prism-face:nth-child(4) { transform: rotateY(216deg) translateZ(115px); }
+        .prism-face:nth-child(5) { transform: rotateY(288deg) translateZ(115px); }
+        
+        /* Menu Panel */
+        .menu-panel {
+            position: absolute;
+            top: 60px;
+            right: -300px;
+            width: 280px;
+            height: calc(100% - 60px);
+            background: rgba(20, 20, 40, 0.95);
+            backdrop-filter: blur(15px);
+            border-left: 1px solid rgba(100, 100, 255, 0.1);
+            padding: 20px;
+            transition: right 0.3s ease;
+            z-index: 20;
+            overflow-y: auto;
+        }
+        
+        .menu-panel.active {
+            right: 0;
+        }
+        
+        .menu-header {
+            font-size: 1.2rem;
+            margin-bottom: 20px;
+            color: #00d4ff;
+            padding-bottom: 10px;
+            border-bottom: 1px solid rgba(100, 100, 255, 0.2);
+        }
+        
+        .menu-item {
+            padding: 15px;
+            margin-bottom: 10px;
+            background: rgba(10, 10, 25, 0.7);
+            border-radius: 10px;
+            border: 1px solid rgba(100, 100, 255, 0.1);
+            color: #e0e0ff;
+            cursor: pointer;
+            transition: background 0.2s, transform 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        .menu-item:active {
+            background: rgba(0, 212, 255, 0.1);
+            transform: translateX(5px);
+        }
+        
+        .menu-icon {
+            width: 24px;
+            height: 24px;
+            background: rgba(0, 212, 255, 0.1);
+            border-radius: 5px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        /* Anant Maidan (Game Canvas) */
+        #anant-maidan {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #0a0a14;
+            display: none;
+            z-index: 700;
+        }
+        
+        .maidan-header {
+            height: 60px;
+            background: rgba(20, 20, 40, 0.9);
+            border-bottom: 1px solid rgba(100, 100, 255, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 20px;
+            color: #00d4ff;
+            font-weight: 600;
+        }
+        
+        .back-button {
+            background: rgba(0, 212, 255, 0.1);
+            border: none;
+            border-radius: 8px;
+            padding: 10px 15px;
+            color: #00d4ff;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .game-canvas-container {
+            width: 100%;
+            height: calc(100% - 60px);
+            overflow: hidden;
+            position: relative;
+        }
+        
+        #game-canvas {
+            width: 100%;
+            height: 100%;
+            display: block;
+        }
+        
+        /* Status Bar */
+        .status-bar {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 24px;
+            background: rgba(10, 10, 25, 0.9);
+            border-top: 1px solid rgba(100, 100, 255, 0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 15px;
+            font-size: 0.7rem;
+            color: #a0a0d0;
+            z-index: 30;
+        }
+        
+        .connection-status {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        
+        .status-indicator {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #0f0;
+        }
+        
+        /* Mobile specific adjustments */
+        @media (max-width: 480px) {
+            .logo-letter {
+                font-size: 3.5rem;
+            }
+            
+            .login-form {
+                padding: 25px;
+                margin: 0 15px;
+            }
+            
+            .menu-panel {
+                width: 260px;
+            }
+        }
+    </style>
 </head>
 <body>
-    <!-- Loading Screen with G-AI-MI Logo Animation -->
-    <div id="loadingScreen" class="screen active">
+    <!-- Loading Screen -->
+    <div id="loading-screen">
         <div class="logo-container">
-            <svg class="gami-logo" width="200" height="200" viewBox="0 0 200 200">
-                <path id="g-path" class="logo-path" d="M50,100 Q100,50 150,100" fill="none"/>
-                <path id="ai-path" class="logo-path" d="M50,120 L70,80 L90,120 M80,100 L90,100" fill="none"/>
-                <path id="mi-path" class="logo-path" d="M110,120 L110,80 L130,80 L130,100 L150,100 L150,120" fill="none"/>
-            </svg>
-            <div class="loading-text">GAMI INITIALIZING</div>
-            <div class="loading-progress">
-                <div class="progress-bar"></div>
-            </div>
+            <div class="logo-letter g">G</div>
+            <div class="logo-letter a1">A</div>
+            <div class="logo-letter i">I</div>
+            <div class="logo-letter m">M</div>
+            <div class="logo-letter a2">I</div>
         </div>
+        <div class="loading-bar-container">
+            <div class="loading-bar" id="loading-bar"></div>
+        </div>
+        <div class="loading-text" id="loading-text">Initializing Core Systems...</div>
     </div>
-
+    
     <!-- Login Screen -->
-    <div id="loginScreen" class="screen">
-        <div class="login-container">
-            <div class="login-header">
-                <svg class="login-logo" width="80" height="80" viewBox="0 0 80 80">
-                    <path class="logo-engraved" d="M20,40 Q40,20 60,40"/>
-                </svg>
-                <h1>GAMI ACCESS</h1>
+    <div id="login-screen">
+        <div class="login-form">
+            <div class="login-title">GAMI Access</div>
+            <div class="input-group">
+                <label class="input-label">Username</label>
+                <input type="text" class="input-field" id="username-input" placeholder="Enter your identifier">
             </div>
-            <form id="loginForm" class="login-form">
-                <div class="input-group">
-                    <svg class="input-icon" width="20" height="20" viewBox="0 0 20 20">
-                        <path d="M10,0 A10,10 0 0,1 20,10 A10,10 0 0,1 10,20 A10,10 0 0,1 0,10 A10,10 0 0,1 10,0 M10,5 A5,5 0 0,0 5,10 A5,5 0 0,0 10,15 A5,5 0 0,0 15,10 A5,5 0 0,0 10,5"/>
-                    </svg>
-                    <input type="text" id="username" name="username" placeholder="USERNAME" required autocomplete="off">
+            <div class="input-group">
+                <label class="input-label">Password</label>
+                <input type="password" class="input-field" id="password-input" placeholder="Enter your encryption key">
+            </div>
+            <button class="login-button" id="login-button">Authenticate</button>
+        </div>
+    </div>
+    
+    <!-- Home Screen -->
+    <div id="home-screen">
+        <div class="header">
+            <div class="hud-info">
+                <div class="hud-item">
+                    <div class="hud-label">ENERGY</div>
+                    <div class="hud-value" id="energy-value">94%</div>
                 </div>
-                <div class="input-group">
-                    <svg class="input-icon" width="20" height="20" viewBox="0 0 20 20">
-                        <path d="M5,8 L5,6 A5,5 0 0,1 15,6 L15,8 M10,12 L10,15 M5,8 L15,8 L15,16 A2,2 0 0,1 13,18 L7,18 A2,2 0 0,1 5,16 L5,8"/>
-                    </svg>
-                    <input type="password" id="password" name="password" placeholder="PASSWORD" required autocomplete="off">
+                <div class="hud-item">
+                    <div class="hud-label">SYNC</div>
+                    <div class="hud-value" id="sync-value">100%</div>
                 </div>
-                <button type="submit" class="login-button">
-                    <span>ENTER SYSTEM</span>
-                    <svg class="button-icon" width="16" height="16" viewBox="0 0 16 16">
-                        <path d="M8,0 L16,8 L8,16 M0,8 L16,8"/>
+                <div class="hud-item">
+                    <div class="hud-label">AI NET</div>
+                    <div class="hud-value" id="ai-net-value">ONLINE</div>
+                </div>
+            </div>
+            <button class="menu-button" id="menu-button">
+                <div class="menu-line"></div>
+                <div class="menu-line"></div>
+                <div class="menu-line"></div>
+            </button>
+        </div>
+        
+        <div class="main-content">
+            <div class="gami-prism-container">
+                <div class="gami-prism">
+                    <div class="prism-face">G</div>
+                    <div class="prism-face">A</div>
+                    <div class="prism-face">I</div>
+                    <div class="prism-face">M</div>
+                    <div class="prism-face">I</div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Menu Panel -->
+        <div class="menu-panel" id="menu-panel">
+            <div class="menu-header">GAMI Systems</div>
+            <div class="menu-item" id="maidan-button">
+                <div class="menu-icon">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#00d4ff" stroke-width="2">
+                        <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                        <line x1="3" y1="9" x2="21" y2="9"></line>
+                        <line x1="9" y1="21" x2="9" y2="9"></line>
                     </svg>
-                </button>
-            </form>
-            <div class="security-notice">
-                <svg class="security-icon" width="14" height="14" viewBox="0 0 14 14">
-                    <path d="M7,0 L14,4 L14,10 L7,14 L0,10 L0,4 L7,0 M7,4 A2,2 0 0,0 5,6 A2,2 0 0,0 7,8 A2,2 0 0,0 9,6 A2,2 0 0,0 7,4"/>
-                </svg>
-                SECURE VAULT CONNECTION ESTABLISHED
+                </div>
+                <span>Anant Maidan</span>
+            </div>
+            <div class="menu-item">
+                <div class="menu-icon">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#00d4ff" stroke-width="2">
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <path d="M12 6v6l4 2"></path>
+                    </svg>
+                </div>
+                <span>Evolution Engine</span>
+            </div>
+            <div class="menu-item">
+                <div class="menu-icon">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#00d4ff" stroke-width="2">
+                        <path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"></path>
+                    </svg>
+                </div>
+                <span>World 3D</span>
+            </div>
+            <div class="menu-item">
+                <div class="menu-icon">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#00d4ff" stroke-width="2">
+                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                        <circle cx="12" cy="7" r="4"></circle>
+                    </svg>
+                </div>
+                <span>AI Brain</span>
+            </div>
+            <div class="menu-item">
+                <div class="menu-icon">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#00d4ff" stroke-width="2">
+                        <rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect>
+                        <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path>
+                    </svg>
+                </div>
+                <span>Auth Vault</span>
             </div>
         </div>
     </div>
-
-    <!-- Main Application Container -->
-    <div id="appContainer" class="screen">
-        <!-- Header HUD -->
-        <header class="hud-header">
-            <div class="hud-left">
-                <button id="menuToggle" class="hud-button">
-                    <svg class="menu-icon" width="24" height="24" viewBox="0 0 24 24">
-                        <path d="M3,6 L21,6 M3,12 L21,12 M3,18 L21,18"/>
-                    </svg>
-                </button>
-                <div class="gami-status">
-                    <span class="status-indicator"></span>
-                    <span class="status-text">GAMI ACTIVE</span>
-                </div>
-            </div>
-            <div class="hud-center">
-                <div class="prism-container">
-                    <svg class="prism-icon" width="32" height="32" viewBox="0 0 32 32">
-                        <polygon points="16,4 28,12 28,24 16,32 4,24 4,12"/>
-                    </svg>
-                    <span class="prism-text">AI PRISM</span>
-                </div>
-            </div>
-            <div class="hud-right">
-                <div class="hud-stats">
-                    <span class="stat-item">ENG: <span id="energyValue">100</span></span>
-                    <span class="stat-item">CRED: <span id="creditValue">0</span></span>
-                </div>
-            </div>
-        </header>
-
-        <!-- Side Navigation Menu -->
-        <nav id="sideMenu" class="side-menu">
-            <div class="menu-header">
-                <svg class="menu-logo" width="40" height="40" viewBox="0 0 40 40">
-                    <path d="M10,20 Q20,10 30,20"/>
+    
+    <!-- Anant Maidan (Game Canvas) -->
+    <div id="anant-maidan">
+        <div class="maidan-header">
+            <button class="back-button" id="back-button">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#00d4ff" stroke-width="2">
+                    <path d="M19 12H5M12 19l-7-7 7-7"></path>
                 </svg>
-                <h2>GAMI SYSTEMS</h2>
-            </div>
-            <ul class="menu-list">
-                <li class="menu-item" data-screen="home">
-                    <svg class="menu-item-icon" width="20" height="20" viewBox="0 0 20 20">
-                        <path d="M10,0 L20,10 L16,10 L16,18 L12,18 L12,12 L8,12 L8,18 L4,18 L4,10 L0,10 L10,0"/>
-                    </svg>
-                    <span>HOME DASHBOARD</span>
-                </li>
-                <li class="menu-item" data-screen="evolution">
-                    <svg class="menu-item-icon" width="20" height="20" viewBox="0 0 20 20">
-                        <path d="M10,0 L20,6 L20,14 L10,20 L0,14 L0,6 L10,0 M10,4 L14,6 L10,8 L6,6 L10,4"/>
-                    </svg>
-                    <span>EVOLUTION MATRIX</span>
-                </li>
-                <li class="menu-item" data-screen="economy">
-                    <svg class="menu-item-icon" width="20" height="20" viewBox="0 0 20 20">
-                        <circle cx="10" cy="10" r="8"/>
-                        <path d="M10,6 L10,14 M6,10 L14,10"/>
-                    </svg>
-                    <span>ECONOMY HUB</span>
-                </li>
-                <li class="menu-item" data-screen="chat">
-                    <svg class="menu-item-icon" width="20" height="20" viewBox="0 0 20 20">
-                        <path d="M2,2 L18,2 L18,14 L6,14 L2,18 L2,2 M6,6 L14,6 M6,10 L12,10"/>
-                    </svg>
-                    <span>P2P NETWORK</span>
-                </li>
-                <li class="menu-item" data-screen="logistics">
-                    <svg class="menu-item-icon" width="20" height="20" viewBox="0 0 20 20">
-                        <path d="M4,4 L16,4 L18,8 L20,8 L20,16 L0,16 L0,8 L2,8 L4,4 M4,8 L16,8"/>
-                    </svg>
-                    <span>LOGISTICS GRID</span>
-                </li>
-                <li class="menu-item" data-screen="recovery">
-                    <svg class="menu-item-icon" width="20" height="20" viewBox="0 0 20 20">
-                        <path d="M10,0 L20,10 L15,10 L15,18 L5,18 L5,10 L0,10 L10,0 M10,4 L12,6 L8,6 L10,4"/>
-                    </svg>
-                    <span>RECOVERY VAULT</span>
-                </li>
-            </ul>
-            <div class="menu-footer">
-                <div class="logout-button" id="logoutButton">
-                    <svg class="logout-icon" width="18" height="18" viewBox="0 0 18 18">
-                        <path d="M7,2 L2,2 L2,16 L7,16 M12,13 L17,9 L12,5 M5,9 L17,9"/>
-                    </svg>
-                    <span>SECURE LOGOUT</span>
-                </div>
-            </div>
-        </nav>
-
-        <!-- Main Content Area -->
-        <main class="content-area">
-            <!-- Home Dashboard Screen -->
-            <div id="homeScreen" class="content-screen active">
-                <div class="dashboard-header">
-                    <h2>GAMI AI PRISM CONTROL</h2>
-                    <div class="prism-controls">
-                        <button class="control-button" id="activatePrism">
-                            <svg width="24" height="24" viewBox="0 0 24 24">
-                                <polygon points="12,2 22,8 22,16 12,22 2,16 2,8"/>
-                            </svg>
-                            ACTIVATE
-                        </button>
-                        <button class="control-button" id="calibratePrism">
-                            <svg width="24" height="24" viewBox="0 0 24 24">
-                                <path d="M12,2 L22,12 L12,22 L2,12 L12,2 M12,6 L8,10 L12,14 L16,10 L12,6"/>
-                            </svg>
-                            CALIBRATE
-                        </button>
-                    </div>
-                </div>
-                <div class="dashboard-grid">
-                    <div class="grid-item ai-status">
-                        <h3>AI BRAIN STATUS</h3>
-                        <div class="status-display" id="aiStatusDisplay">
-                            <!-- AI Status will be loaded here -->
-                        </div>
-                    </div>
-                    <div class="grid-item world-view">
-                        <h3>WORLD 3D PREVIEW</h3>
-                        <div class="world-container" id="worldPreview">
-                            <!-- 3D World Preview -->
-                        </div>
-                    </div>
-                    <div class="grid-item worker-panel">
-                        <h3>WORKER MANAGER</h3>
-                        <div class="worker-list" id="workerList">
-                            <!-- Worker threads will be listed here -->
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Anant Maidan - Game Canvas -->
-            <div id="anantMaidanScreen" class="content-screen">
-                <div class="maidan-header">
-                    <h2>ANANT MAIDAN - INFINITE FIELD</h2>
-                    <div class="maidan-controls">
-                        <button class="control-button" id="toggle3DView">
-                            <svg width="20" height="20" viewBox="0 0 20 20">
-                                <path d="M2,2 L18,2 L18,18 L2,18 L2,2 M6,6 L14,6 L14,14 L6,14 L6,6"/>
-                            </svg>
-                            3D VIEW
-                        </button>
-                        <button class="control-button" id="resetWorld">
-                            <svg width="20" height="20" viewBox="0 0 20 20">
-                                <path d="M10,0 L20,6 L20,14 L10,20 L0,14 L0,6 L10,0"/>
-                            </svg>
-                            RESET
-                        </button>
-                    </div>
-                </div>
-                <div class="maidan-container">
-                    <canvas id="gameCanvas" width="800" height="1200"></canvas>
-                    <div class="maidan-overlay">
-                        <div class="overlay-item coordinates">
-                            <span>X: <span id="coordX">0</span></span>
-                            <span>Y: <span id="coordY">0</span></span>
-                            <span>Z: <span id="coordZ">0</span></span>
-                        </div>
-                        <div class="overlay-item fps-counter">
-                            FPS: <span id="fpsValue">60</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Other content screens will be dynamically loaded here -->
-            <div id="dynamicContent" class="content-screen"></div>
-        </main>
+                Back
+            </button>
+            <span>ANANT MAIDAN</span>
+            <div></div> <!-- Spacer for flex alignment -->
+        </div>
+        <div class="game-canvas-container">
+            <canvas id="game-canvas"></canvas>
+        </div>
+    </div>
+    
+    <!-- Status Bar -->
+    <div class="status-bar">
+        <div class="connection-status">
+            <div class="status-indicator"></div>
+            <span>GAMI Network</span>
+        </div>
+        <div id="system-time">00:00:00 UTC</div>
     </div>
 
-    <!-- Hacker Trap (Hidden) -->
-    <div id="hackerTrap" style="display: none;">
-        <canvas id="trapCanvas" width="1" height="1"></canvas>
-    </div>
-    <!-- 1. Primary Security Systems (Load First) -->
-    <script type="text/javascript" src="/js/hacker_trap.js" absolute></script>
-    <script type="text/javascript" src="/js/auth_vault.js" absolute></script>
+    <!-- External JavaScript Files -->
+    <script src="/assets/js/gami_core.js"></script>
+    <script src="/assets/js/ai_brain.js"></script>
+    <script src="/assets/js/auth_vault.js"></script>
+    <script src="/assets/js/world_3d.js"></script>
+    <script src="/assets/js/evolution.js"></script>
+    <script src="/assets/js/economy.js"></script>
+    <script src="/assets/js/worker_manager.js"></script>
+    <script src="/assets/js/p2p_chat.js"></script>
+    <script src="/assets/js/secret_config.js"></script>
+    <script src="/assets/js/branding.js"></script>
+    <script src="/assets/js/logistics.js"></script>
+    <script src="/assets/js/recovery.js"></script>
+    <script src="/assets/js/hacker_trap.js"></script>
     
-    <!-- 2. Core Controller (Loads and manages all other modules) -->
-    <script type="text/javascript" src="/js/gami_core.js" absolute></script>
-    
-    <!-- 3. AI and Intelligence Systems -->
-    <script type="text/javascript" src="/js/ai_brain.js" absolute></script>
-    <script type="text/javascript" src="/js/worker_manager.js" absolute></script>
-    
-    <!-- 4. Core Game Systems -->
-    <script type="text/javascript" src="/js/world_3d.js" absolute></script>
-    <script type="text/javascript" src="/js/evolution.js" absolute></script>
-    
-    <!-- 5. Economy and Resource Management -->
-    <script type="text/javascript" src="/js/economy.js" absolute></script>
-    <script type="text/javascript" src="/js/logistics.js" absolute></script>
-    
-    <!-- 6. Social and Communication Systems -->
-    <script type="text/javascript" src="/js/p2p_chat.js" absolute></script>
-    <script type="text/javascript" src="/js/branding.js" absolute></script>
-    
-    <!-- 7. Security and Recovery Systems -->
-    <script type="text/javascript" src="/js/recovery.js" absolute></script>
-    
-    <!-- 8. Configuration and Utilities (Loaded in head but confirmed here) -->
-    <!-- secret_config.js already loaded in head -->
-    <!-- branding.js already loaded in head -->
-    
-    <!-- 9. Initialization Script (Runs after all modules are loaded) -->
-    <script type="text/javascript">
-        // Wait for all scripts to load
-        window.addEventListener('load', function() {
-            console.log('GAMI Project: All files loaded');
-            console.log('Total Modules: 14');
-            console.log('Project: G-AI-MI');
-            console.log('Owner: mak_07s__ mr asif khan');
+    <!-- Application Core Script -->
+    <script>
+        // DOM Elements
+        const loadingScreen = document.getElementById('loading-screen');
+        const loadingBar = document.getElementById('loading-bar');
+        const loadingText = document.getElementById('loading-text');
+        const loginScreen = document.getElementById('login-screen');
+        const homeScreen = document.getElementById('home-screen');
+        const anantMaidan = document.getElementById('anant-maidan');
+        const usernameInput = document.getElementById('username-input');
+        const passwordInput = document.getElementById('password-input');
+        const loginButton = document.getElementById('login-button');
+        const menuButton = document.getElementById('menu-button');
+        const menuPanel = document.getElementById('menu-panel');
+        const maidanButton = document.getElementById('maidan-button');
+        const backButton = document.getElementById('back-button');
+        const gameCanvas = document.getElementById('game-canvas');
+        const systemTime = document.getElementById('system-time');
+        
+        // Simulate loading progress
+        let loadProgress = 0;
+        const loadingInterval = setInterval(() => {
+            loadProgress += Math.random() * 15;
+            if (loadProgress > 100) {
+                loadProgress = 100;
+                clearInterval(loadingInterval);
+                
+                // Loading complete, show login screen
+                setTimeout(() => {
+                    loadingScreen.style.opacity = '0';
+                    setTimeout(() => {
+                        loadingScreen.style.display = 'none';
+                        loginScreen.style.display = 'flex';
+                        
+                        // Set focus to username field
+                        usernameInput.focus();
+                    }, 500);
+                }, 300);
+            }
             
-            // Verify all modules are loaded
-            const requiredModules = [
-                'GAMIAuthVault',     // auth_vault.js
-                'GamiMaster',        // gami_core.js
-                'GAMIAIBrain',       // ai_brain.js
-                'WORLD_3D',          // world_3d.js
-                'GAMIEvolution',     // evolution.js
-                'GAMIEconomy',       // economy.js
-                'WorkerManager',     // worker_manager.js
-                'GAMIP2PChat',       // p2p_chat.js
-                'SecretConfig',      // secret_config.js
-                'GAMIBranding',      // branding.js
-                'GAMILogistics',     // logistics.js
-                'GAMIRecovery',      // recovery.js
-                'GAMIHackerTrap'     // hacker_trap.js
-            ];
+            loadingBar.style.width = loadProgress + '%';
             
-            let loadedCount = 0;
-            requiredModules.forEach(module => {
-                if (window[module]) {
-                    loadedCount++;
-                    console.log(`✓ ${module} loaded`);
-                } else {
-                    console.warn(`✗ ${module} not found`);
-                }
-            });
-            
-            console.log(`Modules loaded: ${loadedCount}/${requiredModules.length}`);
-            
-            // System will auto-initialize through gami_core.js
-            // All scene management and module coordination happens automatically
-            
-            // Show system status
-            if (loadedCount >= requiredModules.length - 2) { // Allow 2 modules to fail
-                console.log('GAMI System: READY');
+            // Update loading text based on progress
+            if (loadProgress < 25) {
+                loadingText.textContent = 'Initializing Core Systems...';
+            } else if (loadProgress < 50) {
+                loadingText.textContent = 'Loading AI Modules...';
+            } else if (loadProgress < 75) {
+                loadingText.textContent = 'Establishing Secure Connection...';
             } else {
-                console.error('GAMI System: CRITICAL MODULES MISSING');
+                loadingText.textContent = 'Preparing Authentication...';
+            }
+        }, 200);
+        
+        // Login functionality
+        loginButton.addEventListener('click', () => {
+            const username = usernameInput.value.trim();
+            const password = passwordInput.value.trim();
+            
+            if (username && password) {
+                // Simple validation - in production, this would be handled by auth_vault.js
+                loginScreen.style.opacity = '0';
+                setTimeout(() => {
+                    loginScreen.style.display = 'none';
+                    homeScreen.style.display = 'flex';
+                    
+                    // Initialize HUD updates
+                    startHUDUpdates();
+                }, 500);
+            } else {
+                // Visual feedback for empty fields
+                if (!username) {
+                    usernameInput.style.borderColor = '#ff5555';
+                    setTimeout(() => {
+                        usernameInput.style.borderColor = 'rgba(100, 100, 255, 0.2)';
+                    }, 1000);
+                }
+                if (!password) {
+                    passwordInput.style.borderColor = '#ff5555';
+                    setTimeout(() => {
+                        passwordInput.style.borderColor = 'rgba(100, 100, 255, 0.2)';
+                    }, 1000);
+                }
             }
         });
+        
+        // Allow login with Enter key
+        passwordInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                loginButton.click();
+            }
+        });
+        
+        // Menu toggle functionality
+        menuButton.addEventListener('click', () => {
+            menuButton.classList.toggle('active');
+            menuPanel.classList.toggle('active');
+        });
+        
+        // Navigate to Anant Maidan
+        maidanButton.addEventListener('click', () => {
+            homeScreen.style.display = 'none';
+            anantMaidan.style.display = 'block';
+            
+            // Initialize canvas (in production, this would be handled by world_3d.js)
+            initCanvas();
+            
+            // Close menu if open
+            menuButton.classList.remove('active');
+            menuPanel.classList.remove('active');
+        });
+        
+        // Back button from Anant Maidan
+        backButton.addEventListener('click', () => {
+            anantMaidan.style.display = 'none';
+            homeScreen.style.display = 'flex';
+        });
+        
+        // Update system time
+        function updateSystemTime() {
+            const now = new Date();
+            const timeString = now.toUTCString().split(' ')[4];
+            systemTime.textContent = timeString + ' UTC';
+        }
+        
+        // Simulate HUD updates
+        function startHUDUpdates() {
+            updateSystemTime();
+            setInterval(updateSystemTime, 1000);
+            
+            // Simulate changing energy values
+            setInterval(() => {
+                const energyValue = document.getElementById('energy-value');
+                const currentEnergy = parseInt(energyValue.textContent);
+                const newEnergy = Math.max(85, Math.min(100, currentEnergy + (Math.random() * 6 - 3)));
+                energyValue.textContent = Math.round(newEnergy) + '%';
+                
+                // Color code based on energy level
+                if (newEnergy < 90) {
+                    energyValue.style.color = '#ffaa00';
+                } else {
+                    energyValue.style.color = '#00d4ff';
+                }
+            }, 3000);
+        }
+        
+        // Initialize canvas for Anant Maidan
+        function initCanvas() {
+            // Set canvas dimensions
+            const container = document.querySelector('.game-canvas-container');
+            gameCanvas.width = container.clientWidth;
+            gameCanvas.height = container.clientHeight;
+            
+            const ctx = gameCanvas.getContext('2d');
+            
+            // Simple animated background
+            function drawBackground() {
+                // Clear canvas
+                ctx.fillStyle = '#0a0a14';
+                ctx.fillRect(0, 0, gameCanvas.width, gameCanvas.height);
+                
+                // Draw grid
+                ctx.strokeStyle = 'rgba(0, 212, 255, 0.05)';
+                ctx.lineWidth = 1;
+                
+                const gridSize = 40;
+                const offsetX = (Date.now() / 50) % gridSize;
+                const offsetY = (Date.now() / 50) % gridSize;
+                
+                // Vertical lines
+                for (let x = -offsetX; x < gameCanvas.width; x += gridSize) {
+                    ctx.beginPath();
+                    ctx.moveTo(x, 0);
+                    ctx.lineTo(x, gameCanvas.height);
+                    ctx.stroke();
+                }
+                
+                // Horizontal lines
+                for (let y = -offsetY; y < gameCanvas.height; y += gridSize) {
+                    ctx.beginPath();
+                    ctx.moveTo(0, y);
+                    ctx.lineTo(gameCanvas.width, y);
+                    ctx.stroke();
+                }
+                
+                // Draw center point
+                const centerX = gameCanvas.width / 2;
+                const centerY = gameCanvas.height / 2;
+                
+                ctx.beginPath();
+                ctx.arc(centerX, centerY, 8, 0, Math.PI * 2);
+                ctx.fillStyle = 'rgba(0, 212, 255, 0.3)';
+                ctx.fill();
+                
+                // Draw pulsing ring
+                const pulseSize = 10 + Math.sin(Date.now() / 500) * 20;
+                ctx.beginPath();
+                ctx.arc(centerX, centerY, pulseSize, 0, Math.PI * 2);
+                ctx.strokeStyle = 'rgba(168, 85, 247, 0.3)';
+                ctx.lineWidth = 2;
+                ctx.stroke();
+                
+                // Draw title
+                ctx.font = 'bold 24px system-ui, sans-serif';
+                ctx.textAlign = 'center';
+                ctx.fillStyle = 'rgba(255, 255, 255, 0.8)';
+                ctx.fillText('ANANT MAIDAN', centerX, 50);
+                
+                ctx.font = '14px system-ui, sans-serif';
+                ctx.fillStyle = 'rgba(160, 160, 208, 0.7)';
+                ctx.fillText('Infinite Game Canvas', centerX, 80);
+            }
+            
+            // Animation loop
+            function animate() {
+                drawBackground();
+                requestAnimationFrame(animate);
+            }
+            
+            animate();
+            
+            // Handle window resize
+            window.addEventListener('resize', () => {
+                gameCanvas.width = container.clientWidth;
+                gameCanvas.height = container.clientHeight;
+            });
+        }
+        
+        // Initialize touch events for mobile
+        document.addEventListener('touchstart', function(e) {
+            // Prevent default behavior for menu items
+            if (e.target.classList.contains('menu-item')) {
+                e.preventDefault();
+            }
+        }, { passive: false });
     </script>
 </body>
 </html>
