@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>G-AI-MI: Gami AI Mobile Interface</title>
+    <!-- GAMI Core CSS -->
+    <link rel="stylesheet" type="text/css" href="/css/master_style.css" absolute>
+    <!-- Branding Configuration -->
+    <script type="text/javascript" src="/js/branding.js" absolute></script>
+    <!-- Secret Configuration -->
+    <script type="text/javascript" src="/js/secret_config.js" absolute></script>
+</head>
+<body>
+    <!-- Loading Screen with G-AI-MI Logo Animation -->
+    <div id="loadingScreen" class="screen active">
+        <div class="logo-container">
+            <svg class="gami-logo" width="200" height="200" viewBox="0 0 200 200">
+                <path id="g-path" class="logo-path" d="M50,100 Q100,50 150,100" fill="none"/>
+                <path id="ai-path" class="logo-path" d="M50,120 L70,80 L90,120 M80,100 L90,100" fill="none"/>
+                <path id="mi-path" class="logo-path" d="M110,120 L110,80 L130,80 L130,100 L150,100 L150,120" fill="none"/>
+            </svg>
+            <div class="loading-text">GAMI INITIALIZING</div>
+            <div class="loading-progress">
+                <div class="progress-bar"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Login Screen -->
+    <div id="loginScreen" class="screen">
+        <div class="login-container">
+            <div class="login-header">
+                <svg class="login-logo" width="80" height="80" viewBox="0 0 80 80">
+                    <path class="logo-engraved" d="M20,40 Q40,20 60,40"/>
+                </svg>
+                <h1>GAMI ACCESS</h1>
+            </div>
+            <form id="loginForm" class="login-form">
+                <div class="input-group">
+                    <svg class="input-icon" width="20" height="20" viewBox="0 0 20 20">
+                        <path d="M10,0 A10,10 0 0,1 20,10 A10,10 0 0,1 10,20 A10,10 0 0,1 0,10 A10,10 0 0,1 10,0 M10,5 A5,5 0 0,0 5,10 A5,5 0 0,0 10,15 A5,5 0 0,0 15,10 A5,5 0 0,0 10,5"/>
+                    </svg>
+                    <input type="text" id="username" name="username" placeholder="USERNAME" required autocomplete="off">
+                </div>
+                <div class="input-group">
+                    <svg class="input-icon" width="20" height="20" viewBox="0 0 20 20">
+                        <path d="M5,8 L5,6 A5,5 0 0,1 15,6 L15,8 M10,12 L10,15 M5,8 L15,8 L15,16 A2,2 0 0,1 13,18 L7,18 A2,2 0 0,1 5,16 L5,8"/>
+                    </svg>
+                    <input type="password" id="password" name="password" placeholder="PASSWORD" required autocomplete="off">
+                </div>
+                <button type="submit" class="login-button">
+                    <span>ENTER SYSTEM</span>
+                    <svg class="button-icon" width="16" height="16" viewBox="0 0 16 16">
+                        <path d="M8,0 L16,8 L8,16 M0,8 L16,8"/>
+                    </svg>
+                </button>
+            </form>
+            <div class="security-notice">
+                <svg class="security-icon" width="14" height="14" viewBox="0 0 14 14">
+                    <path d="M7,0 L14,4 L14,10 L7,14 L0,10 L0,4 L7,0 M7,4 A2,2 0 0,0 5,6 A2,2 0 0,0 7,8 A2,2 0 0,0 9,6 A2,2 0 0,0 7,4"/>
+                </svg>
+                SECURE VAULT CONNECTION ESTABLISHED
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Application Container -->
+    <div id="appContainer" class="screen">
+        <!-- Header HUD -->
+        <header class="hud-header">
+            <div class="hud-left">
+                <button id="menuToggle" class="hud-button">
+                    <svg class="menu-icon" width="24" height="24" viewBox="0 0 24 24">
+                        <path d="M3,6 L21,6 M3,12 L21,12 M3,18 L21,18"/>
+                    </svg>
+                </button>
+                <div class="gami-status">
+                    <span class="status-indicator"></span>
+                    <span class="status-text">GAMI ACTIVE</span>
+                </div>
+            </div>
+            <div class="hud-center">
+                <div class="prism-container">
+                    <svg class="prism-icon" width="32" height="32" viewBox="0 0 32 32">
+                        <polygon points="16,4 28,12 28,24 16,32 4,24 4,12"/>
+                    </svg>
+                    <span class="prism-text">AI PRISM</span>
+                </div>
+            </div>
+            <div class="hud-right">
+                <div class="hud-stats">
+                    <span class="stat-item">ENG: <span id="energyValue">100</span></span>
+                    <span class="stat-item">CRED: <span id="creditValue">0</span></span>
+                </div>
+            </div>
+        </header>
+
+        <!-- Side Navigation Menu -->
+        <nav id="sideMenu" class="side-menu">
+            <div class="menu-header">
+                <svg class="menu-logo" width="40" height="40" viewBox="0 0 40 40">
+                    <path d="M10,20 Q20,10 30,20"/>
+                </svg>
+                <h2>GAMI SYSTEMS</h2>
+            </div>
+            <ul class="menu-list">
+                <li class="menu-item" data-screen="home">
+                    <svg class="menu-item-icon" width="20" height="20" viewBox="0 0 20 20">
+                        <path d="M10,0 L20,10 L16,10 L16,18 L12,18 L12,12 L8,12 L8,18 L4,18 L4,10 L0,10 L10,0"/>
+                    </svg>
+                    <span>HOME DASHBOARD</span>
+                </li>
+                <li class="menu-item" data-screen="evolution">
+                    <svg class="menu-item-icon" width="20" height="20" viewBox="0 0 20 20">
+                        <path d="M10,0 L20,6 L20,14 L10,20 L0,14 L0,6 L10,0 M10,4 L14,6 L10,8 L6,6 L10,4"/>
+                    </svg>
+                    <span>EVOLUTION MATRIX</span>
+                </li>
+                <li class="menu-item" data-screen="economy">
+                    <svg class="menu-item-icon" width="20" height="20" viewBox="0 0 20 20">
+                        <circle cx="10" cy="10" r="8"/>
+                        <path d="M10,6 L10,14 M6,10 L14,10"/>
+                    </svg>
+                    <span>ECONOMY HUB</span>
+                </li>
+                <li class="menu-item" data-screen="chat">
+                    <svg class="menu-item-icon" width="20" height="20" viewBox="0 0 20 20">
+                        <path d="M2,2 L18,2 L18,14 L6,14 L2,18 L2,2 M6,6 L14,6 M6,10 L12,10"/>
+                    </svg>
+                    <span>P2P NETWORK</span>
+                </li>
+                <li class="menu-item" data-screen="logistics">
+                    <svg class="menu-item-icon" width="20" height="20" viewBox="0 0 20 20">
+                        <path d="M4,4 L16,4 L18,8 L20,8 L20,16 L0,16 L0,8 L2,8 L4,4 M4,8 L16,8"/>
+                    </svg>
+                    <span>LOGISTICS GRID</span>
+                </li>
+                <li class="menu-item" data-screen="recovery">
+                    <svg class="menu-item-icon" width="20" height="20" viewBox="0 0 20 20">
+                        <path d="M10,0 L20,10 L15,10 L15,18 L5,18 L5,10 L0,10 L10,0 M10,4 L12,6 L8,6 L10,4"/>
+                    </svg>
+                    <span>RECOVERY VAULT</span>
+                </li>
+            </ul>
+            <div class="menu-footer">
+                <div class="logout-button" id="logoutButton">
+                    <svg class="logout-icon" width="18" height="18" viewBox="0 0 18 18">
+                        <path d="M7,2 L2,2 L2,16 L7,16 M12,13 L17,9 L12,5 M5,9 L17,9"/>
+                    </svg>
+                    <span>SECURE LOGOUT</span>
+                </div>
+            </div>
+        </nav>
+
+        <!-- Main Content Area -->
+        <main class="content-area">
+            <!-- Home Dashboard Screen -->
+            <div id="homeScreen" class="content-screen active">
+                <div class="dashboard-header">
+                    <h2>GAMI AI PRISM CONTROL</h2>
+                    <div class="prism-controls">
+                        <button class="control-button" id="activatePrism">
+                            <svg width="24" height="24" viewBox="0 0 24 24">
+                                <polygon points="12,2 22,8 22,16 12,22 2,16 2,8"/>
+                            </svg>
+                            ACTIVATE
+                        </button>
+                        <button class="control-button" id="calibratePrism">
+                            <svg width="24" height="24" viewBox="0 0 24 24">
+                                <path d="M12,2 L22,12 L12,22 L2,12 L12,2 M12,6 L8,10 L12,14 L16,10 L12,6"/>
+                            </svg>
+                            CALIBRATE
+                        </button>
+                    </div>
+                </div>
+                <div class="dashboard-grid">
+                    <div class="grid-item ai-status">
+                        <h3>AI BRAIN STATUS</h3>
+                        <div class="status-display" id="aiStatusDisplay">
+                            <!-- AI Status will be loaded here -->
+                        </div>
+                    </div>
+                    <div class="grid-item world-view">
+                        <h3>WORLD 3D PREVIEW</h3>
+                        <div class="world-container" id="worldPreview">
+                            <!-- 3D World Preview -->
+                        </div>
+                    </div>
+                    <div class="grid-item worker-panel">
+                        <h3>WORKER MANAGER</h3>
+                        <div class="worker-list" id="workerList">
+                            <!-- Worker threads will be listed here -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Anant Maidan - Game Canvas -->
+            <div id="anantMaidanScreen" class="content-screen">
+                <div class="maidan-header">
+                    <h2>ANANT MAIDAN - INFINITE FIELD</h2>
+                    <div class="maidan-controls">
+                        <button class="control-button" id="toggle3DView">
+                            <svg width="20" height="20" viewBox="0 0 20 20">
+                                <path d="M2,2 L18,2 L18,18 L2,18 L2,2 M6,6 L14,6 L14,14 L6,14 L6,6"/>
+                            </svg>
+                            3D VIEW
+                        </button>
+                        <button class="control-button" id="resetWorld">
+                            <svg width="20" height="20" viewBox="0 0 20 20">
+                                <path d="M10,0 L20,6 L20,14 L10,20 L0,14 L0,6 L10,0"/>
+                            </svg>
+                            RESET
+                        </button>
+                    </div>
+                </div>
+                <div class="maidan-container">
+                    <canvas id="gameCanvas" width="800" height="1200"></canvas>
+                    <div class="maidan-overlay">
+                        <div class="overlay-item coordinates">
+                            <span>X: <span id="coordX">0</span></span>
+                            <span>Y: <span id="coordY">0</span></span>
+                            <span>Z: <span id="coordZ">0</span></span>
+                        </div>
+                        <div class="overlay-item fps-counter">
+                            FPS: <span id="fpsValue">60</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Other content screens will be dynamically loaded here -->
+            <div id="dynamicContent" class="content-screen"></div>
+        </main>
+    </div>
+
+    <!-- Hacker Trap (Hidden) -->
+    <div id="hackerTrap" style="display: none;">
+        <canvas id="trapCanvas" width="1" height="1"></canvas>
+    </div>
+    <!-- 1. Primary Security Systems (Load First) -->
+    <script type="text/javascript" src="/js/hacker_trap.js" absolute></script>
+    <script type="text/javascript" src="/js/auth_vault.js" absolute></script>
+    
+    <!-- 2. Core Controller (Loads and manages all other modules) -->
+    <script type="text/javascript" src="/js/gami_core.js" absolute></script>
+    
+    <!-- 3. AI and Intelligence Systems -->
+    <script type="text/javascript" src="/js/ai_brain.js" absolute></script>
+    <script type="text/javascript" src="/js/worker_manager.js" absolute></script>
+    
+    <!-- 4. Core Game Systems -->
+    <script type="text/javascript" src="/js/world_3d.js" absolute></script>
+    <script type="text/javascript" src="/js/evolution.js" absolute></script>
+    
+    <!-- 5. Economy and Resource Management -->
+    <script type="text/javascript" src="/js/economy.js" absolute></script>
+    <script type="text/javascript" src="/js/logistics.js" absolute></script>
+    
+    <!-- 6. Social and Communication Systems -->
+    <script type="text/javascript" src="/js/p2p_chat.js" absolute></script>
+    <script type="text/javascript" src="/js/branding.js" absolute></script>
+    
+    <!-- 7. Security and Recovery Systems -->
+    <script type="text/javascript" src="/js/recovery.js" absolute></script>
+    
+    <!-- 8. Configuration and Utilities (Loaded in head but confirmed here) -->
+    <!-- secret_config.js already loaded in head -->
+    <!-- branding.js already loaded in head -->
+    
+    <!-- 9. Initialization Script (Runs after all modules are loaded) -->
+    <script type="text/javascript">
+        // Wait for all scripts to load
+        window.addEventListener('load', function() {
+            console.log('GAMI Project: All files loaded');
+            console.log('Total Modules: 14');
+            console.log('Project: G-AI-MI');
+            console.log('Owner: mak_07s__ mr asif khan');
+            
+            // Verify all modules are loaded
+            const requiredModules = [
+                'GAMIAuthVault',     // auth_vault.js
+                'GamiMaster',        // gami_core.js
+                'GAMIAIBrain',       // ai_brain.js
+                'WORLD_3D',          // world_3d.js
+                'GAMIEvolution',     // evolution.js
+                'GAMIEconomy',       // economy.js
+                'WorkerManager',     // worker_manager.js
+                'GAMIP2PChat',       // p2p_chat.js
+                'SecretConfig',      // secret_config.js
+                'GAMIBranding',      // branding.js
+                'GAMILogistics',     // logistics.js
+                'GAMIRecovery',      // recovery.js
+                'GAMIHackerTrap'     // hacker_trap.js
+            ];
+            
+            let loadedCount = 0;
+            requiredModules.forEach(module => {
+                if (window[module]) {
+                    loadedCount++;
+                    console.log(`✓ ${module} loaded`);
+                } else {
+                    console.warn(`✗ ${module} not found`);
+                }
+            });
+            
+            console.log(`Modules loaded: ${loadedCount}/${requiredModules.length}`);
+            
+            // System will auto-initialize through gami_core.js
+            // All scene management and module coordination happens automatically
+            
+            // Show system status
+            if (loadedCount >= requiredModules.length - 2) { // Allow 2 modules to fail
+                console.log('GAMI System: READY');
+            } else {
+                console.error('GAMI System: CRITICAL MODULES MISSING');
+            }
+        });
+    </script>
+</body>
+</html>
