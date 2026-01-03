@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>AURA - Prismatic Identity</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/face-landmarks-detection"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.5.0/socket.io.min.js"></script>
+    <script src="https://smtpjs.com/v3/smtp.js"></script>
+</head>
+<body>
+    <div id="appContainer">
+        <div id="loader" class="loader">
+            <div class="liquid-loader"></div>
+        </div>
+        
+        <div id="loginScreen" class="screen">
+            <div class="logo-container">
+                <div class="prism-logo" id="prismLogo"></div>
+                <h1>AURA</h1>
+                <p class="tagline">No Masks, Just Humans</p>
+            </div>
+            
+            <div class="button-group">
+                <button id="newIdentity" class="primary-btn">
+                    <span class="btn-icon">🆔</span>
+                    New Identity
+                </button>
+                <button id="recoverAccount" class="secondary-btn">
+                    <span class="btn-icon">↻</span>
+                    Recover Account
+                </button>
+            </div>
+            
+            <div class="terms">
+                <input type="checkbox" id="termsCheck">
+                <label for="termsCheck">
+                    I agree that AURA may use camera for security verification and anti-fraud detection
+                </label>
+            </div>
+        </div>
+        
+        <div id="homeScreen" class="screen hidden">
+            <div class="header">
+                <div class="profile-section" id="profileMenu">
+                    <div class="avatar" id="userAvatar"></div>
+                    <div class="profile-info">
+                        <span id="usernameDisplay">User</span>
+                        <span class="status" id="userStatus">● Online</span>
+                    </div>
+                </div>
+                
+                <div class="controls">
+                    <select id="categorySelect" class="category-select">
+                        <option value="all">🌍 All</option>
+                        <option value="music">🎵 Music</option>
+                        <option value="tech">💻 Tech</option>
+                        <option value="travel">✈️ Travel</option>
+                        <option value="gaming">🎮 Gaming</option>
+                        <option value="india">🇮🇳 India</option>
+                    </select>
+                    
+                    <div class="privacy-toggle">
+                        <span class="toggle-label">Public</span>
+                        <label class="switch">
+                            <input type="checkbox" id="publicToggle">
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="search-section">
+                <div class="search-box">
+                    <input type="text" id="usernameSearch" placeholder="Search username...">
+                    <button id="aiVerifyBtn" class="ai-shield-btn" title="AI Gender Verification">
+                        <span>🛡️</span>
+                        <div class="tooltip">AI Shield: Verify gender anonymously</div>
+                    </button>
+                </div>
+                <div id="aiResult" class="ai-result"></div>
+            </div>
+            
+            <div class="start-section">
+                <button id="startBtn" class="start-engine">
+                    <div class="liquid-bubble"></div>
+                    <span class="start-text">START</span>
+                </button>
+                <p class="hint">Connect with verified humans worldwide</p>
+            </div>
+            
+            <div class="global-feed">
+                <div class="feed-header">
+                    <h3>🌐 Global Directory</h3>
+                    <div class="online-count" id="onlineCount">0 online</div>
+                </div>
+                
+                <div id="userList" class="user-list">
+                    <div class="user-card-template hidden">
+                        <div class="user-avatar"></div>
+                        <div class="user-details">
+                            <div class="user-name"></div>
+                            <div class="user-meta">
+                                <span class="user-country"></span>
+                                <span class="user-category"></span>
+                            </div>
+                        </div>
+                        <button class="connect-btn">Connect</button>
+                        <div class="trust-score"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div id="chatScreen" class="screen hidden">
+            <div class="chat-header">
+                <button id="backBtn" class="back-btn">←</button>
+                <div class="chat-partner">
+                    <div class="chat-avatar"></div>
+                    <div>
+                        <div id="chatPartnerName">User</div>
+                        <div class="timer" id="timer">48:00:00</div>
+                    </div>
+                </div>
+                <div class="chat-actions">
+                    <button id="videoCallBtn" class="icon-btn" title="Video Call">📹</button>
+                    <button id="audioCallBtn" class="icon-btn" title="Audio Call">📞</button>
+                </div>
+            </div>
+            
+            <div id="messageArea" class="message-area">
+                <div class="system-message">
+                    Chat will self-destruct in <span class="highlight">48 hours</span>. 
+                    All data will be permanently deleted.
+                </div>
+            </div>
+            
+            <div class="chat-input-section">
+                <div class="typing-indicator" id="typingIndicator"></div>
+                <div class="input-wrapper">
+                    <input type="text" id="messageInput" placeholder="Type your message..." 
+                           maxlength="500" autocomplete="off">
+                    <button id="sendBtn" class="send-btn">Send</button>
+                </div>
+                <div class="security-notice">
+                    🔒 End-to-End Encrypted • No Server Storage • Auto-Delete in 48h
+                </div>
+            </div>
+        </div>
+        
+        <div id="warningScreen" class="screen hidden">
+            <div class="warning-content">
+                <div class="warning-icon">⚠️</div>
+                <h2 class="warning-title">Security Alert</h2>
+                <p id="warningMessage" class="warning-text">
+                    Unauthorized access detected. Your device has been flagged.
+                </p>
+                <div class="device-info" id="deviceInfo"></div>
+                <button id="warningOk" class="warning-btn">OK</button>
+            </div>
+        </div>
+        
+        <div id="faceScanOverlay" class="overlay hidden">
+            <div class="scan-container">
+                <div class="scan-header">
+                    <h3>3D Face Verification</h3>
+                    <p>Please look directly at the camera</p>
+                </div>
+                <video id="faceVideo" autoplay playsinline></video>
+                <canvas id="faceCanvas" class="hidden"></canvas>
+                <div class="scan-guide">
+                    <div class="scan-dot"></div>
+                    <div class="scan-ring"></div>
+                </div>
+                <div class="scan-progress">
+                    <div class="progress-bar" id="scanProgress"></div>
+                </div>
+                <button id="cancelScan" class="cancel-btn">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="auth.js"></script>
+    <script src="core-ai.js"></script>
+    <script src="network.js"></script>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            if (localStorage.getItem('aura_banned') === 'true') {
+                showScreen('warningScreen');
+                return;
+            }
+            
+            if (localStorage.getItem('aura_identity')) {
+                showScreen('homeScreen');
+                loadUserProfile();
+            } else {
+                showScreen('loginScreen');
+            }
+            
+            initializeApp();
+        });
+        
+        function showScreen(screenId) {
+            document.querySelectorAll('.screen').forEach(s => s.classList.add('hidden'));
+            document.getElementById(screenId).classList.remove('hidden');
+        }
+        
+        function initializeApp() {
+            setupEventListeners();
+            setupHackerProtection();
+        }
+        
+        function loadUserProfile() {
+            const username = localStorage.getItem('aura_username') || 'User';
+            document.getElementById('usernameDisplay').textContent = username;
+            
+            const avatar = document.getElementById('userAvatar');
+            const avatarColor = localStorage.getItem('aura_avatarColor') || '#667eea';
+            avatar.style.background = `linear-gradient(45deg, ${avatarColor}, #764ba2)`;
+        }
+    </script>
+</body>
+</html>
