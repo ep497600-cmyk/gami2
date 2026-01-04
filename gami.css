@@ -1,0 +1,492 @@
+/* Gami Login System - Pure White Neumorphic Theme */
+
+/* Base Styles - Pure White */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background-color: #FFFFFF;
+    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    overflow: hidden;
+    height: 100vh;
+    width: 100vw;
+    position: fixed;
+    cursor: default;
+}
+
+/* Disable all text selection for security */
+* {
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+/* Gami Container */
+.gami-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    padding: 20px;
+    position: relative;
+    overflow: hidden;
+}
+
+/* Liquid Metal Frost Background Effect */
+.gami-container::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, 
+        rgba(255, 255, 255, 0.98) 0%,
+        rgba(250, 250, 255, 0.96) 25%,
+        rgba(245, 245, 255, 0.94) 50%,
+        rgba(250, 250, 255, 0.96) 75%,
+        rgba(255, 255, 255, 0.98) 100%);
+    z-index: -1;
+}
+
+/* Liquid Metal Frost Glow Effect */
+.gami-container::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 80%;
+    height: 80%;
+    background: radial-gradient(circle, 
+        rgba(255, 255, 255, 0.8) 0%,
+        rgba(255, 255, 255, 0.4) 40%,
+        rgba(255, 255, 255, 0) 70%);
+    filter: blur(60px);
+    z-index: -1;
+    opacity: 0.7;
+}
+
+/* Gami Logo - Liquid Metal Effect */
+.gami-logo {
+    font-size: 3.5rem;
+    font-weight: 900;
+    margin-bottom: 40px;
+    background: linear-gradient(135deg, 
+        #f8f8f8 0%, 
+        #e8e8e8 25%, 
+        #f0f0f0 50%, 
+        #e8e8e8 75%, 
+        #f8f8f8 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    position: relative;
+    text-transform: uppercase;
+    letter-spacing: 3px;
+}
+
+.gami-logo::after {
+    content: 'GAMI';
+    position: absolute;
+    top: 1px;
+    left: 1px;
+    background: linear-gradient(135deg, 
+        rgba(255, 255, 255, 0.9) 0%,
+        rgba(255, 255, 255, 0.7) 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    z-index: -1;
+    filter: blur(0.5px);
+}
+
+/* Neumorphic Form Container */
+.gami-form-container {
+    background: #FFFFFF;
+    padding: 40px;
+    border-radius: 25px;
+    width: 100%;
+    max-width: 400px;
+    box-shadow: 
+        20px 20px 60px #d9d9d9,
+        -20px -20px 60px #ffffff;
+    position: relative;
+    overflow: hidden;
+}
+
+.gami-form-container::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, 
+        rgba(255, 255, 255, 0.1) 0%,
+        rgba(255, 255, 255, 0.05) 100%);
+    pointer-events: none;
+}
+
+/* Form Group */
+.gami-form-group {
+    margin-bottom: 25px;
+    position: relative;
+}
+
+/* Labels */
+.gami-label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 600;
+    color: #666;
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+/* Input Fields - 3D Neumorphic Effect */
+.gami-input {
+    width: 100%;
+    padding: 15px;
+    background: #FFFFFF;
+    border: none;
+    border-radius: 15px;
+    font-size: 1rem;
+    color: #333;
+    transition: all 0.3s ease;
+    box-shadow: 
+        inset 5px 5px 10px #f0f0f0,
+        inset -5px -5px 10px #ffffff;
+    position: relative;
+}
+
+.gami-input:focus {
+    outline: none;
+    box-shadow: 
+        inset 8px 8px 15px #e8e8e8,
+        inset -8px -8px 15px #ffffff;
+}
+
+.gami-input::placeholder {
+    color: #aaa;
+}
+
+/* Availability Status */
+.gami-availability {
+    position: absolute;
+    right: 10px;
+    top: 40px;
+    font-size: 0.8rem;
+    padding: 2px 8px;
+    border-radius: 10px;
+    display: none;
+}
+
+.gami-available {
+    background: rgba(200, 255, 200, 0.2);
+    color: #5a8;
+    display: block;
+}
+
+.gami-taken {
+    background: rgba(255, 200, 200, 0.2);
+    color: #c55;
+    display: block;
+}
+
+/* Subscribe Button - 3D Liquid Metal Effect */
+.gami-subscribe-btn {
+    width: 100%;
+    padding: 18px;
+    background: linear-gradient(135deg, #f8f8f8 0%, #e8e8e8 100%);
+    border: none;
+    border-radius: 15px;
+    font-size: 1rem;
+    font-weight: 700;
+    color: #666;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin-top: 10px;
+    box-shadow: 
+        10px 10px 20px #e8e8e8,
+        -10px -10px 20px #ffffff,
+        inset 0 0 0 transparent;
+    position: relative;
+    overflow: hidden;
+}
+
+.gami-subscribe-btn:hover {
+    box-shadow: 
+        8px 8px 15px #e0e0e0,
+        -8px -8px 15px #ffffff,
+        inset 0 0 0 transparent;
+    transform: translateY(2px);
+}
+
+.gami-subscribe-btn:active {
+    box-shadow: 
+        inset 5px 5px 10px #e0e0e0,
+        inset -5px -5px 10px #ffffff;
+    transform: translateY(4px);
+}
+
+.gami-subscribe-btn::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, 
+        transparent, 
+        rgba(255, 255, 255, 0.4), 
+        transparent);
+    transition: left 0.6s;
+}
+
+.gami-subscribe-btn:hover::before {
+    left: 100%;
+}
+
+/* Forgot Password Link */
+.gami-forgot-link {
+    display: block;
+    text-align: center;
+    margin-top: 20px;
+    color: #888;
+    text-decoration: none;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: color 0.3s ease;
+}
+
+.gami-forgot-link:hover {
+    color: #666;
+}
+
+/* Success Message */
+.gami-success-message {
+    text-align: center;
+    padding: 20px;
+    font-size: 1.2rem;
+    color: #5a8;
+    font-weight: 600;
+    display: none;
+}
+
+/* Gami Logo Animation */
+.gami-logo-animate {
+    animation: breathe 3s ease-in-out infinite;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 1000;
+    display: none;
+}
+
+@keyframes breathe {
+    0%, 100% {
+        transform: translate(-50%, -50%) scale(1);
+        opacity: 1;
+    }
+    50% {
+        transform: translate(-50%, -50%) scale(1.05);
+        opacity: 0.9;
+    }
+}
+
+/* Emergency Overlay */
+.gami-emergency-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: #FFFFFF;
+    z-index: 9999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.5s ease;
+}
+
+.gami-emergency-active {
+    pointer-events: all;
+    opacity: 1;
+}
+
+/* Hyper-Voxel Prism Box */
+.gami-hyper-voxel {
+    background: #FFFFFF;
+    padding: 40px;
+    border-radius: 20px;
+    max-width: 500px;
+    width: 90%;
+    text-align: center;
+    box-shadow: 
+        0 0 0 1px rgba(255, 255, 255, 0.8),
+        0 0 30px rgba(200, 200, 255, 0.3),
+        0 0 60px rgba(200, 200, 255, 0.2),
+        inset 0 0 20px rgba(255, 255, 255, 0.9);
+    position: relative;
+    overflow: hidden;
+}
+
+.gami-hyper-voxel::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: linear-gradient(45deg, 
+        transparent 30%, 
+        rgba(255, 255, 255, 0.1) 50%, 
+        transparent 70%);
+    animation: prismShift 4s linear infinite;
+}
+
+@keyframes prismShift {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+/* Glitch Effect */
+.gami-glitch-text {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #c55;
+    line-height: 1.4;
+    position: relative;
+    animation: glitch 0.5s infinite;
+}
+
+@keyframes glitch {
+    0% {
+        transform: translate(0);
+    }
+    20% {
+        transform: translate(-2px, 2px);
+    }
+    40% {
+        transform: translate(-2px, -2px);
+    }
+    60% {
+        transform: translate(2px, 2px);
+    }
+    80% {
+        transform: translate(2px, -2px);
+    }
+    100% {
+        transform: translate(0);
+    }
+}
+
+/* Vocalic Kinetic Glyphs (VKG) */
+.vkg-success {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    border: 2px solid rgba(90, 170, 136, 0.3);
+    margin: 0 auto 20px;
+    position: relative;
+    animation: pulseRing 2s ease-in-out infinite;
+}
+
+@keyframes pulseRing {
+    0%, 100% {
+        transform: scale(1);
+        border-width: 2px;
+        opacity: 1;
+    }
+    50% {
+        transform: scale(1.1);
+        border-width: 4px;
+        opacity: 0.7;
+    }
+}
+
+.vkg-warning {
+    width: 60px;
+    height: 60px;
+    margin: 0 auto 20px;
+    position: relative;
+}
+
+.vkg-warning::before,
+.vkg-warning::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 40px;
+    height: 40px;
+    border: 2px solid rgba(197, 85, 85, 0.3);
+    border-radius: 50%;
+    transform-origin: center;
+    animation: tetraVortex 3s linear infinite;
+}
+
+.vkg-warning::before {
+    animation-delay: -1.5s;
+}
+
+@keyframes tetraVortex {
+    0% {
+        transform: translate(-50%, -50%) rotate(0deg) scale(1);
+        opacity: 1;
+    }
+    50% {
+        transform: translate(-50%, -50%) rotate(180deg) scale(0.7);
+        opacity: 0.5;
+    }
+    100% {
+        transform: translate(-50%, -50%) rotate(360deg) scale(1);
+        opacity: 1;
+    }
+}
+
+/* Read-Only Mode */
+.gami-readonly .gami-input,
+.gami-readonly .gami-subscribe-btn,
+.gami-readonly .gami-forgot-link {
+    pointer-events: none;
+    opacity: 0.7;
+}
+
+/* Device Lockdown */
+.gami-lockdown {
+    pointer-events: none;
+    filter: blur(2px);
+}
+
+/* Synthetic Diamond Substrate Effect */
+.gami-diamond-effect {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 100;
+    background: 
+        radial-gradient(circle at 20% 80%, rgba(255, 255, 255, 0.1) 0%, transparent 50%),
+        radial-gradient(circle at 80% 20%, rgba(255, 255, 255, 0.1) 0%, transparent 50%),
+        radial-gradient(circle at 40% 40%, rgba(255, 255, 255, 0.05) 0%, transparent 50%);
+    mix-blend-mode: overlay;
+}
